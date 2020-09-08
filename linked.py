@@ -90,3 +90,86 @@ class Solution:
             if (slow == fast):
                 return True
         return False
+
+
+    '''
+    两个有序的链表合并
+    思路:
+    1，创建一个新的头结点并保存到save
+    2，判断两个链表是否为空
+    3，不为空，则进行下一步
+    4，当L1的结点小于L2的结点时，则将新的头结点的next指针指向L1
+    5，然后L1往后移动到下个结点，新的链表也移动到下一个结点
+    6，当L1的结点大于L2的结点时，则将新的头结点的next指针指向L2
+    7，然后L2往后移动到下个结点，新的链表也移动到下一个结点
+    8，当以上的循环结束，判断L1和L2是否为空
+    9，当为空的时候，则将新链表的next指向不为空的链表
+    10，return save.next
+    '''
+    def mergeTwoLists(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        head = tmp = ListNode(0)
+        while l1 and l2:
+            if l1.val <= l2.val:
+                tmp.next = l1
+                l1 = l1.next
+            else:
+                tmp.next = l2
+                l2 = l2.next
+            tmp = tmp.next
+        tmp.next = l1 or l2
+        return head.next
+
+
+    '''
+    删除链表倒数第 n 个结点
+    '''
+    def removeNthFromEnd(self, head, n):
+        """
+        :type head: ListNode
+        :type n: int
+        :rtype: ListNode
+        """
+        # 快慢两个指针，快指针先往前走n步
+        # 然后两个指针同时往后走，直到快指针走到链表尾部
+        # 快慢指针相差n步，慢指针的下一步即为倒数第n个数
+
+        # 先判断head是否为空以及n是否为0
+        if head == None or n == 0: return head
+        # 快指针先往前走n步
+        fastHead = head
+        while n >= 0 and fastHead != None:
+            fastHead = fastHead.next
+            n = n - 1
+        # 如果快指针为空并且n大于0，则说明n大于链表长度，返回head
+        if fastHead == None and n > 0: return head
+        # 如果快指针为空并且n等于0，则说明倒数第n个节点即为第一个节点，也就是头节点，返回head.next
+        if fastHead == None and n == 0: return head.next
+        # 快慢指针同时往后走，直到快指针为空，则慢指针的next即为倒数第n个节点
+        slowHead = head
+        while fastHead != None:
+            slowHead = slowHead.next
+            fastHead = fastHead.next
+        slowHead.next = slowHead.next.next
+        return head
+
+
+    '''
+    求链表的中间结点
+    '''
+    def middleNode(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        # 快慢指针，快指针2步走，慢指针1步走，当快指针到链表尾部时，慢指针到中间节点
+        slowHead = head
+        fastHead = head
+        while fastHead != None and fastHead.next != None:
+            slowHead = slowHead.next
+            fastHead = fastHead.next.next
+        return slowHead
